@@ -1,7 +1,7 @@
 
 
   
-   > This repository contains the source code  for [TheSnakeGame](https://thegamee.netlify.app/)
+   > This repository contains the source code  for [TheSnakeGame](https://osmanbytyqi.github.io/TheGame/)
 
 
   <br/>
@@ -11,7 +11,7 @@
   <img src="Screenshot_2.png">
 </p>
 
-[![Website](https://img.shields.io/website?down_color=red&down_message=down&label=Game&logo=github&style=for-the-badge&up_color=blue&up_message=up&url=https%3A%2F%2Fthegamee.netlify.app%2F)](https://thegamee.netlify.app/)
+[![Website](https://img.shields.io/website?down_color=red&down_message=down&label=Game&logo=github&style=for-the-badge&up_color=blue&up_message=up&url=https%3A%2F%2Fthegamee.netlify.app%2F)](https://osmanbytyqi.github.io/TheGame/)
 
 ---
  ## Technologies 
