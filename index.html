@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="snake1-removebg-preview.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   
+
+    <title>Snake Game</title>
+   
+   
+    <style>
+
+
+
+    body{
+        margin: 0px;
+        padding: 0px;
+        display: flex;
+        flex-direction: column;
+        justify-content: baseline;
+    align-items: center;
+    
+
+        
+       
+    }
+    
+
+    canvas{
+        box-shadow:black 20px 10px 50px;
+    }
+    
+    .myButton {
+	box-shadow:inset 0px 0px 15px 3px #0055df;
+	background:linear-gradient(to bottom, #2e466e 5%, #415989 100%);
+	background-color:#2e466e;
+	border-radius:17px;
+	border:1px solid #1f2f47;
+	display:inline-block;
+	cursor:pointer;
+	color:#fffefe;
+	font-family:Arial;
+	font-size:15px;
+	padding:6px 13px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #263666;
+   margin-top: 25px;
+  
+}
+.myButton:focus{
+        outline: none;
+    }
+.myButton:hover {
+	background:linear-gradient(to bottom, #415989 5%, #2e466e 100%);
+	background-color:#415989;
+}
+.myButton:active {
+	position:relative;
+	top:1px;
+}
+
+    
+
+   
+
+
+    </style>
+</head>
+<body onload="change()">
+
+   
+
+<!-- <div class="classs" >
+<p id = "status"></p>
+<a id = "map-link" target="_blank"></a>
+</div>
+     -->
+   
+    <h1>Snake Game</h1>
+    <canvas id="game" width="400" height="400"></canvas>
+    <button class="myButton" onclick="refreshPage()">Play again</button>
+    
+ 
+
+
+    <script>
+    const canvas=document.getElementById('game');
+    const ctx=canvas.getContext('2d');
+
+    class SnakePart{
+        constructor(x,y){
+            this.x=x;
+            this.y=y;
+        }
+    }
+
+  
+    let speed =7;
+
+
+    let tileCount=20;
+
+    let tileSize=canvas.width/tileCount-2;
+
+    let headX=10;
+
+    let headY=10;
+
+    const snakeParts=[];
+    let tailLength=2;
+
+    let appleX=5;
+    let appleY=5;
+
+    
+
+    let xVelocity=0;
+
+    let yVelocity=0;
+
+    let score=0;
+
+    const sound =new Audio("index.mp3");
+
+    const newsound=new Audio("vibration.mp3");
+
+
+//main function
+
+    function drawGame(){
+
+        changeSnakePosition();
+
+        let result=isGameOver();
+        if(result==true){
+            return;
+        }
+
+
+        clearScreen();
+        drawApple();
+
+        checkAppleCollision();
+
+     
+      
+        drawSnake();
+        drawScore();
+        setTimeout(drawGame,1000/speed);
+    }
+
+    function isGameOver(){
+        let gameOver=false;
+
+        if(yVelocity===0&&xVelocity===0){
+        return false;
+       
+        
+        }
+        //walls
+        if(headX<0){
+            gameOver=true;
+            newsound.play();
+        }
+
+         else if(headX>=tileCount){
+            gameOver=true;
+            newsound.play();
+
+        }
+        else if(headY<0){
+            gameOver=true;
+            newsound.play();
+        }
+
+        else if(headY>=tileCount){
+            gameOver=true;
+            newsound.play();
+
+        }
+
+        for(let i=0;i<snakeParts.length;i++){
+            let part=snakeParts[i];
+            if(part.x===headX&&part.y===headY){
+                gameOver=true;
+                newsound.play();
+                break;
+
+            }
+        }
+       
+
+
+
+        if(gameOver==true){
+            ctx.fillStyle="white";
+            ctx.font='50px Verdana';
+
+            
+            
+        
+           
+            ctx.fillText("Game Over!",canvas.width/6.5,canvas.height/2);
+
+        }
+    
+
+        return gameOver;
+
+    
+
+}
+
+
+
+
+    function drawScore(){
+        ctx.fillStyle="white";
+        ctx.font="12px Verdana";
+        ctx.fillText("Score" + score,canvas.width-50,10);
+
+    }
+
+
+
+
+function clearScreen(){
+    ctx.fillStyle="black";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+}
+
+
+
+
+function drawSnake(){
+     ctx.fillStyle="orange";
+     ctx.fillRect(headX*tileCount,headY*tileCount,tileSize,tileSize);
+
+
+     ctx.fillStyle='green';
+     for(let i=0;i<snakeParts.length;i++){
+         let part=snakeParts[i];
+         ctx.fillRect(part.x*tileCount,part.y*tileCount,tileSize,tileSize);
+
+     }
+
+     snakeParts.push(new SnakePart(headX,headY));//put an item at the end of the list next to the head
+     while(snakeParts.length>tailLength){
+         snakeParts.shift();//remove the furthers item form the snake parts if have more than our tail size
+
+     }
+    }
+
+
+
+ function changeSnakePosition(){
+     headX=headX+xVelocity;
+     headY=headY+yVelocity;
+
+
+ }
+
+
+
+ function drawApple(){
+     ctx.fillStyle="red";
+     ctx.fillRect(appleX*tileCount,appleY*tileCount,tileSize,tileSize);
+     
+
+    }
+
+    function checkAppleCollision(){
+        if(appleX===headX&&appleY==headY){
+            appleX=Math.floor(Math.random()*tileCount);
+            appleY=Math.floor(Math.random()*tileCount);
+            tailLength++;
+            score++;
+            sound.play();
+
+
+        }
+
+    }
+
+   
+
+
+
+ document.body.addEventListener("keydown",keyDown);
+
+ function keyDown(event){
+
+    //up
+
+     if(event.keyCode==38){
+         if(yVelocity==1)
+         
+             return;
+         
+         yVelocity=-1;
+         xVelocity=0;
+
+
+     }
+     //down
+
+     if(event.keyCode==40){
+        if(yVelocity==-1)
+         
+         return;
+     
+         yVelocity=1;
+         xVelocity=0;
+
+
+     }
+
+     //left
+
+
+
+     
+     if(event.keyCode==37){
+        if(xVelocity==1)
+         
+         return;
+     
+
+
+         yVelocity=0;
+         xVelocity=-1;
+
+
+     }
+
+
+     //right
+
+     
+     if(event.keyCode==39){
+
+        if(xVelocity==-1)
+         
+         return;
+     
+         yVelocity=0;
+         xVelocity=1;
+
+
+     }
+
+
+ }
+
+
+
+ drawGame();
+
+
+
+ var i=0;
+ var col=new Array("rgb(115, 117, 116)","rgb(73, 112, 93)"," rgb(18, 92, 102)","rgb(73, 102, 18)");
+
+function change(){
+
+    document.body.style.background=col[i];
+    i++;
+
+    if(i>col.length){
+        i=0;
+
+    }
+    window.setTimeout("change()",1000);
+
+}
+
+
+if('geolocation' in navigator){
+    console.log('geolcation avaiable');
+  navigator.geolocation.getCurrentPosition(position=>{
+     
+    console.log(position);
+
+  }
+  );
+}else{
+  document.write('geolocaion is not avaliable');
+}
+
+//  mapLink.href = '';
+//  mapLink.textContent = '';
+//  mapLink.href = `https://www.openstreetmap.org/#map=18/${latitude}/${longitude}`;
+//  mapLink.textContent = `Latitude: ${latitude} °, Longitude: ${longitude} °`;
+
+
+// mapLink.href = `https://www.openstreetmap.org/#map=18/${latitude}/${longitude}`;
+// mapLink.textContent = `Latitude: ${latitude} °,
+// Longitude: ${longitude} °`;
+
+
+
+function refreshPage(){
+    window.location.reload();
+} 
+
+
+
+
+
+    </script>
+     
+   
+</body>
+</html>
