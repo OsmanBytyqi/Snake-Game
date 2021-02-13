@@ -15,7 +15,7 @@
 
 ---
  ## Technologies 
- Project is created with:
+ TheGame is created with:
  * HTML
  * CSS
  * JavaScript
